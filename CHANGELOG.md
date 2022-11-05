@@ -1,3 +1,7 @@
+# v1.0.3 (2022.11.05)
+Changes：
+* Change init order
+
 # v1.0.2 (2022.11.05)
 Changes：
 * Update JGoC version to v1.0.2

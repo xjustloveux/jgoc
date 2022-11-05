@@ -260,11 +260,11 @@ import (
 )
 
 func main() {
-	
+	` + jobInit + `
 	if err := controller.Init(); err != nil {
 		
 		fmt.Println(err)
-	}` + jobInit + `
+	}
 }
 `
 	}
