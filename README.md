@@ -1,7 +1,7 @@
 [![JGo Web](https://jgo.dev/assets/images/logo_300.svg)](https://jgo.dev/)
 
 [![JGoC release](https://img.shields.io/github/v/release/xjustloveux/jgoc)](https://github.com/xjustloveux/jgoc/releases)
-[![codecov](https://codecov.io/gh/xjustloveux/jgoc/branch/master/graph/badge.svg?token=RCO5VO2YU6)](https://codecov.io/gh/xjustloveux/jgoc)
+[![codecov](https://codecov.io/gh/xjustloveux/jgoc/branch/master/graph/badge.svg?token=BMUZK6DR8C)](https://codecov.io/gh/xjustloveux/jgoc)
 [![Build Status](https://github.com/xjustloveux/jgoc/actions/workflows/go.yml/badge.svg)](https://github.com/xjustloveux/jgoc/actions/workflows/go.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xjustloveux/jgoc)](https://goreportcard.com/report/github.com/xjustloveux/jgoc)
 [![PkgGoDev](https://pkg.go.dev/badge/mod/github.com/xjustloveux/jgoc)](https://pkg.go.dev/mod/github.com/xjustloveux/jgoc)
