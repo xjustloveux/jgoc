@@ -38,7 +38,7 @@ and [godror](https://github.com/godror/godror).
 ---
 
 ```shell
-go install github.com/xjustloveux/jgoc
+go install github.com/xjustloveux/jgoc@latest
 ```
 
 # QuickStart

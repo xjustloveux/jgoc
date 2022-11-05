@@ -7,7 +7,7 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/godror/godror v0.34.0
 	github.com/spf13/cobra v1.6.1
-	github.com/xjustloveux/jgo v1.2.12
+	github.com/xjustloveux/jgo v1.2.14
 	gopkg.in/yaml.v2 v2.4.0
 )
 

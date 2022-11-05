@@ -241,7 +241,7 @@ func getColJson(col jsql.TableSchema) string {
 	if root.Gorm {
 
 		d := len(col.DataDefault) > 0
-		k := col.PrimaryKey > 0
+		k := col.PrimaryKey != nil
 		i := col.IsIdentity == "YES"
 		g := d || k
 		if g {
