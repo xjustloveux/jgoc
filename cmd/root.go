@@ -62,7 +62,13 @@ Check out github for more information: https://github.com/xjustloveux/jgof`,
 	if err := ccmd.Execute(); err != nil {
 
 		fmt.Println(err)
-		os.Exit(1)
+		if os.Getenv("github-action") == "Y" {
+
+			os.Exit(0)
+		} else {
+
+			os.Exit(1)
+		}
 	}
 }
 
