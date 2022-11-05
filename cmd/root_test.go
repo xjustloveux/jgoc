@@ -17,13 +17,19 @@ import (
 
 func TestCreate(t *testing.T) {
 
+	if err := jError("test"); err == nil {
+
+		t.Error("jError must be return error")
+	}
 	path, _ := os.Getwd()
 	if err := os.Chdir(strings.Replace(path, "cmd", "test", -1)); err != nil {
 
 		t.Error(err)
 		return
 	}
-	args := []string{"--name", "test", "--pro", "--mod", "--srv", "--sch", "--test"}
 	jfile.RegisterCodec(jfile.Yaml.String(), yaml.Codec{})
+	args := []string{"--name", "test", "--pro", "--mod", "--srv", "--sch", "--test"}
+	Execute(args)
+	args = []string{"--name", "test", "--pro", "--mod", "--srv", "--ds", "TestMSSql", "--table", "TEST", "--gorm", "--sch", "--job", "job002", "--test"}
 	Execute(args)
 }
