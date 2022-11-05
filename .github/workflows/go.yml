@@ -24,6 +24,7 @@ jobs:
     - name: Build
       run: go build -v ./...
       env:
+        PKG_CONFIG_PATH: /usr/lib/pkgconfig/oci8.pc
         github-action: Y
 
     - name: Test
