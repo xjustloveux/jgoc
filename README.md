@@ -13,8 +13,8 @@
 * [Overview](#Overview)
 * [Middlewares](#Middlewares)
 * [Installation](#Installation)
-* [Quick Start](#Quick Start)
-* [Command Line Usage](#Command Line Usage)
+* [QuickStart](#QuickStart)
+* [CommandLineUsage](#CommandLineUsage)
 
 # Overview
 
@@ -41,7 +41,7 @@ and [godror](https://github.com/godror/godror).
 go install github.com/xjustloveux/jgoc
 ```
 
-# Quick Start
+# QuickStart
 
 ---
 
@@ -74,7 +74,7 @@ jgoc --name example.com/helloworld --pro --srv
 jgoc --name example.com/helloworld --sch
 ```
 
-# Command Line Usage
+# CommandLineUsage
 
 ---
 
