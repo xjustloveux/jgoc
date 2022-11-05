@@ -29,8 +29,8 @@ func Execute(args []string) {
 JGoC goal is to simplify the created project framework, model and schedule steps while providing variant customization options for all steps.
 Check out github for more information: https://github.com/xjustloveux/jgof`,
 		Version:       "v1.0.0",
-		SilenceUsage:  false,
-		SilenceErrors: false,
+		SilenceUsage:  true,
+		SilenceErrors: true,
 		Args:          cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
