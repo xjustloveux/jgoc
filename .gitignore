@@ -13,3 +13,12 @@
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+.idea/
+test/go.mod
+test/go.sum
+test/main.go
+test/controller/
+test/global/
+test/job/
+test/model/
+test/service/
