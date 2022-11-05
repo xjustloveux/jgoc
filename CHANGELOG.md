@@ -1,3 +1,7 @@
+# v1.0.2 (2022.11.05)
+Changes：
+* Update JGoC version to v1.0.2
+
 # v1.0.1 (2022.11.05)
 Changes：
 * Update JGo version to v1.2.14

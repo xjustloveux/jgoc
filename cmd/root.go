@@ -28,7 +28,7 @@ func Execute(args []string) {
 		Long: `JGoC provides an easier way to create Go project, model and schedule.
 JGoC goal is to simplify the created project framework, model and schedule steps while providing variant customization options for all steps.
 Check out github for more information: https://github.com/xjustloveux/jgof`,
-		Version:       "v1.0.0",
+		Version:       "v1.0.2",
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		Args:          cobra.NoArgs,
