@@ -156,24 +156,29 @@ func getColComment(col jsql.TableSchema) string {
 
 func getColType(col jsql.TableSchema) string {
 
+	pointer := ""
+	if root.Pointer {
+
+		pointer = "*"
+	}
 	t := strings.ToLower(col.DataType)
 	switch t {
 	case "bit":
-		return "uint8"
+		return fmt.Sprint(pointer, "uint8")
 	case "tinyint":
-		return "int16"
+		return fmt.Sprint(pointer, "int16")
 	case "smallint":
 		fallthrough
 	case "mediumint":
-		return "int32"
+		return fmt.Sprint(pointer, "int32")
 	case "int":
-		return "int"
+		return fmt.Sprint(pointer, "int")
 	case "bigint":
-		return "int64"
+		return fmt.Sprint(pointer, "int64")
 	case "smallmoney":
 		fallthrough
 	case "float":
-		return "float32"
+		return fmt.Sprint(pointer, "float32")
 	case "money":
 		fallthrough
 	case "real":
@@ -183,7 +188,7 @@ func getColType(col jsql.TableSchema) string {
 	case "numeric":
 		fallthrough
 	case "decimal":
-		return "float64"
+		return fmt.Sprint(pointer, "float64")
 	case "date":
 		fallthrough
 	case "datetime":
@@ -236,7 +241,7 @@ func getColJson(col jsql.TableSchema) string {
 	if root.Gorm {
 
 		d := len(col.DataDefault) > 0
-		k := col.PrimaryKey != nil
+		k := col.PrimaryKey > 0
 		i := col.IsIdentity == "YES"
 		g := d || k
 		if g {

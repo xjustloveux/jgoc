@@ -9,6 +9,7 @@ db:
     TestOracle:
       type: Oracle
       dsn: user/password@192.168.1.1:1521/ORCLCDB
+      ds: godror
       dbName: Test
 cron:
   schedule:

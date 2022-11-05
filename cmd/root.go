@@ -44,13 +44,14 @@ Check out github for more information: https://github.com/xjustloveux/jgof`,
 		return
 	}
 	ccmd.Flags().BoolVar(&root.Project, "pro", false, "created project framework")
-	ccmd.Flags().BoolVar(&root.Model, "mod", false, "created database model")
-	ccmd.Flags().BoolVar(&root.Schedule, "sch", false, "created schedule")
-	ccmd.Flags().BoolVar(&root.Gorm, "gorm", false, "create model and service with gorm")
-	ccmd.Flags().BoolVar(&root.Service, "srv", false, "created model service")
-	ccmd.Flags().StringVar(&root.Datasource, "ds", "", "specify the datasource name to be created model and service")
-	ccmd.Flags().StringVar(&root.Table, "table", "", "specify the table name to be created model and service")
-	ccmd.Flags().StringVar(&root.Job, "job", "", "specify the job name to be created schedule")
+	ccmd.Flags().BoolVar(&root.Model, "mod", false, "created database model, need config/config.json or config/config.yaml file, configuration refer to https://github.com/xjustloveux/jgo#configuration")
+	ccmd.Flags().BoolVar(&root.Schedule, "sch", false, "created schedule, need config/config.json or config/config.yaml file, configuration refer to https://github.com/xjustloveux/jgo#configuration-1")
+	ccmd.Flags().BoolVar(&root.Pointer, "pointer", false, "columns of numeric type will be converted to pointer type when creating the model")
+	ccmd.Flags().BoolVar(&root.Gorm, "gorm", false, `create model and service with gorm, required flag(s) "mod"`)
+	ccmd.Flags().BoolVar(&root.Service, "srv", false, `created model service, required flag(s) "mod"`)
+	ccmd.Flags().StringVar(&root.Datasource, "ds", "", `specify the datasource name to be created model and service, required flag(s) "mod"`)
+	ccmd.Flags().StringVar(&root.Table, "table", "", `specify the table name to be created model and service, required flag(s) "mod"`)
+	ccmd.Flags().StringVar(&root.Job, "job", "", `specify the job name to be created schedule, required flag(s) "sch"`)
 	test := ccmd.Flags()
 	test.BoolVar(&root.Test, "test", false, "")
 	if err := test.MarkHidden("test"); err != nil {
@@ -78,7 +79,7 @@ func execute() error {
 
 		return errors.New(`required flag(s) "pro", "mod" or "sch" not set`)
 	}
-	if !root.Model && (root.Gorm || root.Service || len(root.Datasource) > 0 || len(root.Table) > 0) {
+	if !root.Model && (root.Pointer || root.Gorm || root.Service || len(root.Datasource) > 0 || len(root.Table) > 0) {
 
 		return errors.New(`required flag(s) "mod" not set`)
 	}

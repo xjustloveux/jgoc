@@ -8,11 +8,12 @@ type Root struct {
 	Name       string
 	Project    bool
 	Model      bool
-	Schedule   bool
+	Pointer    bool
 	Gorm       bool
 	Service    bool
 	Datasource string
 	Table      string
+	Schedule   bool
 	Job        string
 	Test       bool
 }

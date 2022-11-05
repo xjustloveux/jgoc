@@ -11,6 +11,7 @@
 ---
 
 * [Overview](#Overview)
+* [Middlewares](#Middlewares)
 * [Installation](#Installation)
 * [Quick Start](#Quick Start)
 * [Command Line Usage](#Command Line Usage)
@@ -22,6 +23,15 @@
 JGoC provides an easier way to create Go project, model and schedule.
 
 It is designed on the basis [JGo](https://github.com/xjustloveux/jgo) and [gin](https://github.com/gin-gonic/gin).
+
+# Middlewares
+
+---
+
+Sql middleware use [mysql](https://github.com/go-sql-driver/mysql), [go-mssqldb](https://github.com/denisenkom/go-mssqldb)
+and [godror](https://github.com/godror/godror).
+
+***Note:* The middleware used by Oracle is `godror`, which is different from the default `go-oci8` of jgo, so the config file needs to set the `ds` tag.**
 
 # Installation
 
@@ -35,8 +45,33 @@ go install github.com/xjustloveux/jgoc
 
 ---
 
+#### create project
 ```shell
 jgoc --name example.com/helloworld --pro
+```
+#### create project, model
+```shell
+jgoc --name example.com/helloworld --pro --mod
+```
+#### create project, model, service
+```shell
+jgoc --name example.com/helloworld --pro --mod --srv
+```
+#### create project, model, service, schedule
+```shell
+jgoc --name example.com/helloworld --pro --mod --srv --sch
+```
+#### create model
+```shell
+jgoc --name example.com/helloworld --mod
+```
+#### create model, service
+```shell
+jgoc --name example.com/helloworld --pro --srv
+```
+#### create schedule
+```shell
+jgoc --name example.com/helloworld --sch
 ```
 
 # Command Line Usage
@@ -48,6 +83,7 @@ jgoc --name example.com/helloworld --pro
 | --name        | string | module name, required                                                                                                                                                |
 | --pro         |        | created project framework                                                                                                                                            |
 | --mod         |        | created database model, need config/config.json or config/config.yaml file, configuration refer to [configuration](https://github.com/xjustloveux/jgo#configuration) |
+| --pointer     |        | columns of numeric type will be converted to pointer type when creating the model, required flag(s) "mod"                                                            |
 | --srv         |        | created model service, required flag(s) "mod"                                                                                                                        |
 | --ds          | string | specify the datasource name to be created model and service, required flag(s) "mod"                                                                                  |
 | --table       | string | specify the table name to be created model and service, required flag(s) "mod"                                                                                       |
