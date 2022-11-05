@@ -35,8 +35,6 @@ func loadSchema() error {
 
 		if root.Test {
 
-			var k int8
-			k = 1
 			datasource[i].Tables = []model.Table{
 				{
 					Name: "TEST",
@@ -46,7 +44,7 @@ func loadSchema() error {
 							DataType:      "int",
 							IsNullable:    "NO",
 							DataDefault:   "",
-							PrimaryKey:    &k,
+							PrimaryKey:    1,
 							IsIdentity:    "YES",
 							ColumnComment: "sequence",
 							TableComment:  "JGoC Test Table",
