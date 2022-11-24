@@ -1,3 +1,13 @@
+# v1.0.4 (2022.11.24)
+New Features：
+* `PostgreSql` support
+* Json value support
+* Auto init sql module when init project
+
+Changes：
+* Update JGo version to v1.3.1
+* Import sort
+
 # v1.0.3 (2022.11.05)
 Changes：
 * Change init order

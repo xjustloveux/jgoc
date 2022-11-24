@@ -6,8 +6,12 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/xjustloveux/jgo/jcast"
 	"github.com/xjustloveux/jgo/jfile"
+	"github.com/xjustloveux/jgo/jsql"
 	"github.com/xjustloveux/jgoc/model"
+	"sort"
+	"strings"
 )
 
 func checkProject() error {
@@ -176,12 +180,28 @@ func getProjectFileContent(path string) string {
 
 	switch path {
 	case "controller/a/a101ctr/a101.go":
+		module := []string{`
+	"` + root.Name + `/service/a/a101srv"`, `
+	"github.com/gin-gonic/gin"`, `
+	"net/http"`}
+		sort.Slice(module, func(i, j int) bool {
+			re := []string{" ", "　", "	", "_", `
+`}
+			a := module[i]
+			b := module[j]
+			for _, v := range re {
+				a = strings.Replace(a, v, "", -1)
+				b = strings.Replace(b, v, "", -1)
+			}
+			return a < b
+		})
+		mod := ""
+		for _, v := range module {
+			mod += v
+		}
 		return `package a101ctr
 
-import (
-	"` + root.Name + `/service/a/a101srv"
-	"github.com/gin-gonic/gin"
-	"net/http"
+import (` + mod + `
 )
 
 func Example(ctx *gin.Context) {
@@ -240,27 +260,83 @@ func DoSomething() string {
 }
 `
 	case "main.go":
-		jobModule := ""
+		module := []string{`
+	"` + root.Name + `/controller"`, `
+	"fmt"`}
 		jobInit := ""
 		if root.Schedule {
 
-			jobModule = `
-	"` + root.Name + `/job"`
+			module = append(module, `
+	"`+root.Name+`/job"`)
+			module = append(module, `
+	"github.com/xjustloveux/jgo/jcron"`)
 			jobInit = `
 	if err := job.Init(); err != nil {
 		
 		fmt.Println(err)
+	}
+	if err := jcron.Init(); err != nil {
+
+		fmt.Println(err)
 	}`
+		}
+		sqlInit := ""
+		if root.Service && !root.Gorm {
+
+			module = append(module, `
+	"github.com/xjustloveux/jgo/jsql"`)
+			sqlInit = `
+	if err := jsql.Init(); err != nil {
+
+		fmt.Println(err)
+	}`
+			ds := jsql.GetDataSource()
+			for k, v := range ds {
+
+				if len(root.Datasource) <= 0 || root.Datasource == k {
+
+					if m, err := jcast.StringMapString(v); err == nil {
+
+						switch t, _ := jsql.ParseDBType(m["type"]); t {
+						case jsql.MySql:
+							module = append(module, `
+	_ "github.com/go-sql-driver/mysql"`)
+						case jsql.MSSql:
+							module = append(module, `
+	_ "github.com/denisenkom/go-mssqldb"`)
+						case jsql.Oracle:
+							module = append(module, `
+	_ "github.com/godror/godror"`)
+						case jsql.PostgreSql:
+							module = append(module, `
+	_ "github.com/lib/pq"`)
+						}
+					}
+				}
+			}
+		}
+		sort.Slice(module, func(i, j int) bool {
+			re := []string{" ", "　", "	", "_", `
+`}
+			a := module[i]
+			b := module[j]
+			for _, v := range re {
+				a = strings.Replace(a, v, "", -1)
+				b = strings.Replace(b, v, "", -1)
+			}
+			return a < b
+		})
+		mod := ""
+		for _, v := range module {
+			mod += v
 		}
 		return `package main
 
-import (
-	"` + root.Name + `/controller"` + jobModule + `
-	"fmt"
+import (` + mod + `
 )
 
 func main() {
-	` + jobInit + `
+	` + jobInit + sqlInit + `
 	if err := controller.Init(); err != nil {
 		
 		fmt.Println(err)

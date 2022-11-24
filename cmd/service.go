@@ -7,6 +7,8 @@ package cmd
 import (
 	"fmt"
 	"github.com/xjustloveux/jgoc/model"
+	"sort"
+	"strings"
 )
 
 func checkService() error {
@@ -85,13 +87,29 @@ func getJgoContent(dsModName, dsSrvName, dsName string, table model.Table) strin
 	tableNameUCC := strToUCC(table.Name)
 	tableNameLCC := strToLCC(table.Name)
 	tableComment := table.Schema[0].TableComment
-	mod := fmt.Sprint(dsModName, ".", tableNameUCC)
+	model := fmt.Sprint(dsModName, ".", tableNameUCC)
+	module := []string{`
+	"` + root.Name + `/model/` + dsModName + `"`, `
+	"github.com/fatih/structs"`, `
+	"github.com/xjustloveux/jgo/jsql"`}
+	sort.Slice(module, func(i, j int) bool {
+		re := []string{" ", "　", "	", "_", `
+`}
+		a := module[i]
+		b := module[j]
+		for _, v := range re {
+			a = strings.Replace(a, v, "", -1)
+			b = strings.Replace(b, v, "", -1)
+		}
+		return a < b
+	})
+	mod := ""
+	for _, v := range module {
+		mod += v
+	}
 	return `package ` + dsSrvName + `
 
-import (
-	"` + root.Name + `/model/` + dsModName + `"
-	"github.com/fatih/structs"
-	"github.com/xjustloveux/jgo/jsql"
+import (` + mod + `
 )
 
 // ` + tableNameUCC + ` ` + tableComment + `
@@ -106,7 +124,7 @@ type ` + tableNameLCC + ` struct {
 }
 
 // Create insert data
-func (srv *` + tableNameLCC + `) Create(data ` + mod + `) (jsql.Result, error) {
+func (srv *` + tableNameLCC + `) Create(data ` + model + `) (jsql.Result, error) {
 
 	return (&jsql.TableAgent{
 		DSKey: srv.ds,
@@ -116,7 +134,7 @@ func (srv *` + tableNameLCC + `) Create(data ` + mod + `) (jsql.Result, error) {
 }
 
 // CreateTx insert data for tx
-func (srv *` + tableNameLCC + `) CreateTx(agent *jsql.Agent, data ` + mod + `) (jsql.Result, error) {
+func (srv *` + tableNameLCC + `) CreateTx(agent *jsql.Agent, data ` + model + `) (jsql.Result, error) {
 
 	return (&jsql.TableAgent{
 		Agent: agent,
@@ -219,13 +237,29 @@ func getGormContent(dsModName, dsSrvName, dsName string, table model.Table) stri
 	tableNameUCC := strToUCC(table.Name)
 	tableNameLCC := strToLCC(table.Name)
 	tableComment := table.Schema[0].TableComment
-	mod := fmt.Sprint(dsModName, ".", tableNameUCC)
+	model := fmt.Sprint(dsModName, ".", tableNameUCC)
+	module := []string{`
+	"` + root.Name + `/model/` + dsModName + `"`, `
+	"fmt"`, `
+	"gorm.io/gorm"`}
+	sort.Slice(module, func(i, j int) bool {
+		re := []string{" ", "　", "	", "_", `
+`}
+		a := module[i]
+		b := module[j]
+		for _, v := range re {
+			a = strings.Replace(a, v, "", -1)
+			b = strings.Replace(b, v, "", -1)
+		}
+		return a < b
+	})
+	mod := ""
+	for _, v := range module {
+		mod += v
+	}
 	return `package ` + dsSrvName + `
 
-import (
-	"` + root.Name + `/model/` + dsModName + `"
-	"fmt"
-	"gorm.io/gorm"
+import (` + mod + `
 )
 
 // ` + tableNameUCC + ` ` + tableComment + `
@@ -238,13 +272,13 @@ type ` + tableNameLCC + ` struct {
 }
 
 // Create insert data
-func (srv *` + tableNameLCC + `) Create(db *gorm.DB, data ` + mod + `) error {
+func (srv *` + tableNameLCC + `) Create(db *gorm.DB, data ` + model + `) error {
 
 	return db.Table(srv.table).Create(&data).Error
 }
 
 // FindAll query all data
-func (srv *` + tableNameLCC + `) FindAll(db *gorm.DB, data []` + mod + `, param ...map[string]interface{}) error {
+func (srv *` + tableNameLCC + `) FindAll(db *gorm.DB, data []` + model + `, param ...map[string]interface{}) error {
 
 	db = db.Table(srv.table)
 	for _, v1 := range param {
@@ -258,7 +292,7 @@ func (srv *` + tableNameLCC + `) FindAll(db *gorm.DB, data []` + mod + `, param 
 }
 
 // FindFirst query first data
-func (srv *` + tableNameLCC + `) FindFirst(db *gorm.DB, data ` + mod + `, param ...map[string]interface{}) error {
+func (srv *` + tableNameLCC + `) FindFirst(db *gorm.DB, data ` + model + `, param ...map[string]interface{}) error {
 
 	db = db.Table(srv.table)
 	for _, v1 := range param {
@@ -296,7 +330,7 @@ func (srv *` + tableNameLCC + `) Delete(db *gorm.DB, param ...map[string]interfa
 			db = db.Where(fmt.Sprint(k2, " = ?"), v2)
 		}
 	}
-	return db.Delete(&` + mod + `{}).Error
+	return db.Delete(&` + model + `{}).Error
 }
 `
 }

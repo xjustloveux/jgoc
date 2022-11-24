@@ -125,7 +125,7 @@ func haveTimeCol(table model.Table) bool {
 		case "timestamp":
 			return true
 		default:
-			if b, err := regexp.MatchString("^timestamp", t); err == nil && b {
+			if b, err := regexp.MatchString("^time", t); err == nil && b {
 
 				return true
 			} else if err != nil {
@@ -163,6 +163,10 @@ func getColType(col jsql.TableSchema) string {
 	}
 	t := strings.ToLower(col.DataType)
 	switch t {
+	case "bool":
+		fallthrough
+	case "boolean":
+		return fmt.Sprint(pointer, "bool")
 	case "bit":
 		return fmt.Sprint(pointer, "uint8")
 	case "tinyint":
@@ -172,6 +176,8 @@ func getColType(col jsql.TableSchema) string {
 	case "mediumint":
 		return fmt.Sprint(pointer, "int32")
 	case "int":
+		fallthrough
+	case "integer":
 		return fmt.Sprint(pointer, "int")
 	case "bigint":
 		return fmt.Sprint(pointer, "int64")
@@ -208,9 +214,13 @@ func getColType(col jsql.TableSchema) string {
 	case "varbinary":
 		fallthrough
 	case "image":
+		fallthrough
+	case "bytea":
 		return "[]byte"
+	case "json":
+		return "interface{}"
 	default:
-		if b, err := regexp.MatchString("^timestamp", t); err == nil && b {
+		if b, err := regexp.MatchString("^time", t); err == nil && b {
 
 			return "time.Time"
 		} else if err != nil {
@@ -240,7 +250,8 @@ func getColJson(col jsql.TableSchema) string {
 	gorm := ""
 	if root.Gorm {
 
-		d := len(col.DataDefault) > 0
+		v := defValCheck(col)
+		d := len(v) > 0
 		k := col.PrimaryKey != nil
 		i := col.IsIdentity == "YES"
 		g := d || k
@@ -251,7 +262,7 @@ func getColJson(col jsql.TableSchema) string {
 		t := false
 		if d {
 
-			gorm += `default:` + col.DataDefault
+			gorm += `default:` + v
 			t = true
 		}
 		if k {
@@ -272,4 +283,40 @@ func getColJson(col jsql.TableSchema) string {
 		}
 	}
 	return "`json:\"" + col.ColumnName + "\"" + gorm + "`"
+}
+
+func defValCheck(col jsql.TableSchema) string {
+
+	val := col.DataDefault
+	t := strings.ToLower(col.DataType)
+	switch t {
+	case "tinyint":
+		fallthrough
+	case "smallint":
+		fallthrough
+	case "mediumint":
+		fallthrough
+	case "int":
+		fallthrough
+	case "integer":
+		fallthrough
+	case "bigint":
+		fallthrough
+	case "smallmoney":
+		fallthrough
+	case "float":
+		fallthrough
+	case "money":
+		fallthrough
+	case "real":
+		fallthrough
+	case "double":
+		fallthrough
+	case "numeric":
+		fallthrough
+	case "decimal":
+		val = strings.Replace(val, "(", "", -1)
+		val = strings.Replace(val, ")", "", -1)
+	}
+	return val
 }

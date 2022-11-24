@@ -7,6 +7,7 @@ import (
 	_ "github.com/denisenkom/go-mssqldb"
 	_ "github.com/go-sql-driver/mysql"
 	_ "github.com/godror/godror"
+	_ "github.com/lib/pq"
 	"github.com/xjustloveux/jgo/jfile"
 	"github.com/xjustloveux/jgoc/cmd"
 	"github.com/xjustloveux/jgoc/yaml"

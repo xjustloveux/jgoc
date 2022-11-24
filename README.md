@@ -29,9 +29,7 @@ It is designed on the basis [JGo](https://github.com/xjustloveux/jgo) and [gin](
 ---
 
 Sql middleware use [mysql](https://github.com/go-sql-driver/mysql), [go-mssqldb](https://github.com/denisenkom/go-mssqldb)
-and [godror](https://github.com/godror/godror).
-
-***Note:* The middleware used by Oracle is `godror`, which is different from the default `go-oci8` of jgo, so the config file needs to set the `ds` tag.**
+, [godror](https://github.com/godror/godror) and [pq](https://github.com/lib/pq).
 
 # Installation
 
