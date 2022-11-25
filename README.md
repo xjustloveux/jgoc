@@ -79,6 +79,7 @@ jgoc --name example.com/helloworld --sch
 | Flags         | Type   | Comment                                                                                                                                                              |
 |---------------|--------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | --name        | string | module name, required                                                                                                                                                |
+| --env         | string | jgo config environment value                                                                                                                                         |
 | --pro         |        | created project framework                                                                                                                                            |
 | --mod         |        | created database model, need config/config.json or config/config.yaml file, configuration refer to [configuration](https://github.com/xjustloveux/jgo#configuration) |
 | --pointer     |        | columns of numeric type will be converted to pointer type when creating the model, required flag(s) "mod"                                                            |

@@ -43,6 +43,7 @@ Check out github for more information: https://github.com/xjustloveux/jgof`,
 		fmt.Println(err)
 		return
 	}
+	ccmd.Flags().StringVar(&root.Env, "env", "", "jgo config environment value")
 	ccmd.Flags().BoolVar(&root.Project, "pro", false, "created project framework")
 	ccmd.Flags().BoolVar(&root.Model, "mod", false, "created database model, need config/config.json or config/config.yaml file, configuration refer to https://github.com/xjustloveux/jgo#configuration")
 	ccmd.Flags().BoolVar(&root.Schedule, "sch", false, "created schedule, need config/config.json or config/config.yaml file, configuration refer to https://github.com/xjustloveux/jgo#configuration-1")

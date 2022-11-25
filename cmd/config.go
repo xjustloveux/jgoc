@@ -41,6 +41,10 @@ func checkConfig() error {
 func checkConfigFile() error {
 
 	fileName := "config.json"
+	if len(root.Env) > 0 {
+
+		fileName = fmt.Sprint("config-", root.Env, "json")
+	}
 	path := fmt.Sprint("./config/", fileName)
 	if exist, err := jfile.Exist(path); err != nil {
 
@@ -54,6 +58,10 @@ func checkConfigFile() error {
 		jPrint(fmt.Sprint(path, " not exist"))
 	}
 	fileName = "config.yaml"
+	if len(root.Env) > 0 {
+
+		fileName = fmt.Sprint("config-", root.Env, "yaml")
+	}
 	path = fmt.Sprint("./config/", fileName)
 	if exist, err := jfile.Exist(path); err != nil {
 
@@ -63,12 +71,20 @@ func checkConfigFile() error {
 		if root.Model {
 
 			jsql.SetFormat(jfile.Yaml)
-			jsql.SetFileName(fileName)
+			jsql.SetFileName("config.yaml")
+			if len(root.Env) > 0 {
+
+				jsql.SetEnvVal(root.Env)
+			}
 		}
 		if root.Schedule {
 
 			jcron.SetFormat(jfile.Yaml)
-			jcron.SetFileName(fileName)
+			jcron.SetFileName("config.yaml")
+			if len(root.Env) > 0 {
+
+				jcron.SetEnvVal(root.Env)
+			}
 		}
 		jPrint(fmt.Sprint(path, " exist"))
 		return nil

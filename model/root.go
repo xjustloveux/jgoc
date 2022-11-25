@@ -6,6 +6,7 @@ package model
 
 type Root struct {
 	Name       string
+	Env        string
 	Project    bool
 	Model      bool
 	Pointer    bool

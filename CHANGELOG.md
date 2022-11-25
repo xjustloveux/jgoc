@@ -1,3 +1,7 @@
+# v1.0.5 (2022.11.25)
+New Features：
+* `JGo` environment support
+
 # v1.0.4 (2022.11.24)
 New Features：
 * `PostgreSql` support
