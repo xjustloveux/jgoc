@@ -1,4 +1,8 @@
-# v1.0.6 (2022.11.24)
+# v1.0.7 (2022.11.25)
+Bug Fixes：
+* Fixed install module bug
+
+# v1.0.6 (2022.11.25)
 Changes：
 * Add environment test
 

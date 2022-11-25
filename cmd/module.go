@@ -109,9 +109,11 @@ func checkModInit(str string) error {
 
 		pkg = append(pkg, "github.com/xjustloveux/jgo")
 	}
+	l := len(fmt.Sprint("module ", root.Name))
+	ckStr := str[l:]
 	for _, v := range pkg {
 
-		if b, err := regexp.MatchString(v, str); err != nil {
+		if b, err := regexp.MatchString(v, ckStr); err != nil {
 
 			return err
 		} else if b {
