@@ -41,10 +41,6 @@ func checkConfig() error {
 func checkConfigFile() error {
 
 	fileName := "config.json"
-	if len(root.Env) > 0 {
-
-		fileName = fmt.Sprint("config-", root.Env, "json")
-	}
 	path := fmt.Sprint("./config/", fileName)
 	if exist, err := jfile.Exist(path); err != nil {
 
@@ -52,41 +48,83 @@ func checkConfigFile() error {
 	} else if exist {
 
 		jPrint(fmt.Sprint(path, " exist"))
-		return nil
+		if len(root.Env) > 0 {
+
+			fileName = fmt.Sprint("config-", root.Env, ".json")
+			path = fmt.Sprint("./config/", fileName)
+			if exist, err = jfile.Exist(path); err != nil {
+
+				return err
+			} else if exist {
+
+				jPrint(fmt.Sprint(path, " exist"))
+				if root.Model {
+
+					jsql.SetEnvVal(root.Env)
+				}
+				if root.Schedule {
+
+					jcron.SetEnvVal(root.Env)
+				}
+				return nil
+			} else if !exist {
+
+				jPrint(fmt.Sprint(path, " not exist"))
+			}
+		} else {
+
+			return nil
+		}
 	} else if !exist {
 
 		jPrint(fmt.Sprint(path, " not exist"))
 	}
 	fileName = "config.yaml"
-	if len(root.Env) > 0 {
-
-		fileName = fmt.Sprint("config-", root.Env, "yaml")
-	}
 	path = fmt.Sprint("./config/", fileName)
 	if exist, err := jfile.Exist(path); err != nil {
 
 		return err
 	} else if exist {
 
+		jPrint(fmt.Sprint(path, " exist"))
+		if len(root.Env) > 0 {
+
+			fileName = fmt.Sprint("config-", root.Env, ".yaml")
+			path = fmt.Sprint("./config/", fileName)
+			if exist, err = jfile.Exist(path); err != nil {
+
+				return err
+			} else if exist {
+
+				jPrint(fmt.Sprint(path, " exist"))
+				if root.Model {
+
+					jsql.SetFormat(jfile.Yaml)
+					jsql.SetFileName("config.yaml")
+					jsql.SetEnvVal(root.Env)
+				}
+				if root.Schedule {
+
+					jcron.SetFormat(jfile.Yaml)
+					jcron.SetFileName("config.yaml")
+					jcron.SetEnvVal(root.Env)
+				}
+				return nil
+			} else if !exist {
+
+				jPrint(fmt.Sprint(path, " not exist"))
+			}
+		}
 		if root.Model {
 
 			jsql.SetFormat(jfile.Yaml)
 			jsql.SetFileName("config.yaml")
-			if len(root.Env) > 0 {
-
-				jsql.SetEnvVal(root.Env)
-			}
 		}
 		if root.Schedule {
 
 			jcron.SetFormat(jfile.Yaml)
 			jcron.SetFileName("config.yaml")
-			if len(root.Env) > 0 {
-
-				jcron.SetEnvVal(root.Env)
-			}
 		}
-		jPrint(fmt.Sprint(path, " exist"))
 		return nil
 	}
 	return jError("not found any config file")

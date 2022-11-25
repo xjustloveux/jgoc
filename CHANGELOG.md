@@ -1,3 +1,10 @@
+# v1.0.6 (2022.11.24)
+Changes：
+* Add environment test
+
+Bug Fixes：
+* Fixed environment check config file bug
+
 # v1.0.5 (2022.11.25)
 New Features：
 * `JGo` environment support
