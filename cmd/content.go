@@ -9,7 +9,7 @@ const (
 	CcmdLong  = `JGoC provides an easier way to create Go project, model and schedule.
 JGoC goal is to simplify the created project framework, model and schedule steps while providing variant customization options for all steps.
 Check out github for more information: https://github.com/xjustloveux/jgof`
-	CcmdVer = `v1.0.8`
+	CcmdVer = `v1.0.9`
 
 	FlagsName    = `module name`
 	FlagsEnv     = `jgo config environment value`
@@ -34,6 +34,7 @@ Check out github for more information: https://github.com/xjustloveux/jgof`
 	ModuleGorm       = `gorm.io/gorm`
 	ModuleJGo        = `github.com/xjustloveux/jgo`
 	ModuleStructs    = `github.com/fatih/structs`
+	ModuleGovaluate  = `github.com/Knetic/govaluate`
 
 	ProCtrA101Import1 = `
 	"%v/service/a/a101srv"`

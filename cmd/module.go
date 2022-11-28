@@ -108,6 +108,7 @@ func checkModInit(str string) error {
 
 			pkg = append(pkg, ModuleJGo)
 			pkg = append(pkg, ModuleStructs)
+			pkg = append(pkg, ModuleGovaluate)
 		}
 	}
 	if root.Schedule && (!root.Service || root.Gorm) {
@@ -116,7 +117,6 @@ func checkModInit(str string) error {
 	}
 	l := len(fmt.Sprint("module ", root.Name))
 	ckStr := str[l:]
-	tidy := false
 	for _, v := range pkg {
 
 		if b, err := regexp.MatchString(v, ckStr); err != nil {
@@ -132,14 +132,6 @@ func checkModInit(str string) error {
 
 				return err
 			}
-			tidy = true
-		}
-	}
-	if tidy {
-
-		if err := runComm(exec.Command("go", "mod", "tidy")); err != nil {
-
-			return err
 		}
 	}
 	return nil
