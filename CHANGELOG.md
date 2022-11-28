@@ -1,3 +1,7 @@
+# v1.0.10 (2022.11.28)
+Bug Fixes：
+* Fixed project import jfile bug
+
 # v1.0.9 (2022.11.28)
 Bug Fixes：
 * Fixed install module tidy bug

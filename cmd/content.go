@@ -102,8 +102,10 @@ func DoSomething() string {
 	"%v/controller"`
 	ProMainImport2 = `
 	"fmt"`
-	ProMainImportYaml = `
+	ProMainImportYaml1 = `
 	"%v/middleware/yaml"`
+	ProMainImportYaml2 = `
+	"%v/jfile"`
 	ProMainInitYaml = `
 	jfile.RegisterCodec(jfile.Yaml.String(), yaml.Codec{})`
 	ProMainImportJob1 = `

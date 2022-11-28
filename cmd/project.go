@@ -207,7 +207,8 @@ func getProjectFileContent(path string) string {
 		yamlInit := ""
 		if root.Yaml {
 
-			module = append(module, fmt.Sprintf(ProMainImportYaml, root.Name))
+			module = append(module, fmt.Sprintf(ProMainImportYaml1, root.Name))
+			module = append(module, fmt.Sprintf(ProMainImportYaml2, ModuleJGo))
 			yamlInit = ProMainInitYaml
 		}
 		jobInit := ""
