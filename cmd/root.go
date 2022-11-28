@@ -23,12 +23,10 @@ var (
 func Execute(args []string) {
 
 	ccmd := &cobra.Command{
-		Use:   name,
-		Short: `create project, model or schedule as fast and easily as possible`,
-		Long: `JGoC provides an easier way to create Go project, model and schedule.
-JGoC goal is to simplify the created project framework, model and schedule steps while providing variant customization options for all steps.
-Check out github for more information: https://github.com/xjustloveux/jgof`,
-		Version:       "v1.0.3",
+		Use:           name,
+		Short:         CcmdShort,
+		Long:          CcmdLong,
+		Version:       CcmdVer,
 		SilenceUsage:  true,
 		SilenceErrors: true,
 		Args:          cobra.NoArgs,
@@ -37,22 +35,22 @@ Check out github for more information: https://github.com/xjustloveux/jgof`,
 			return execute()
 		},
 	}
-	ccmd.Flags().StringVar(&root.Name, "name", "", "module name")
+	ccmd.Flags().StringVar(&root.Name, "name", "", FlagsName)
 	if err := ccmd.MarkFlagRequired("name"); err != nil {
 
 		fmt.Println(err)
 		return
 	}
-	ccmd.Flags().StringVar(&root.Env, "env", "", "jgo config environment value")
-	ccmd.Flags().BoolVar(&root.Project, "pro", false, "created project framework")
-	ccmd.Flags().BoolVar(&root.Model, "mod", false, "created database model, need config/config.json or config/config.yaml file, configuration refer to https://github.com/xjustloveux/jgo#configuration")
-	ccmd.Flags().BoolVar(&root.Schedule, "sch", false, "created schedule, need config/config.json or config/config.yaml file, configuration refer to https://github.com/xjustloveux/jgo#configuration-1")
-	ccmd.Flags().BoolVar(&root.Pointer, "pointer", false, "columns of numeric type will be converted to pointer type when creating the model")
-	ccmd.Flags().BoolVar(&root.Gorm, "gorm", false, `create model and service with gorm, required flag(s) "mod"`)
-	ccmd.Flags().BoolVar(&root.Service, "srv", false, `created model service, required flag(s) "mod"`)
-	ccmd.Flags().StringVar(&root.Datasource, "ds", "", `specify the datasource name to be created model and service, required flag(s) "mod"`)
-	ccmd.Flags().StringVar(&root.Table, "table", "", `specify the table name to be created model and service, required flag(s) "mod"`)
-	ccmd.Flags().StringVar(&root.Job, "job", "", `specify the job name to be created schedule, required flag(s) "sch"`)
+	ccmd.Flags().StringVar(&root.Env, "env", "", FlagsEnv)
+	ccmd.Flags().BoolVar(&root.Project, "pro", false, FlagsPro)
+	ccmd.Flags().BoolVar(&root.Model, "mod", false, FlagsMod)
+	ccmd.Flags().BoolVar(&root.Schedule, "sch", false, FlagsSch)
+	ccmd.Flags().BoolVar(&root.Pointer, "pointer", false, FlagsPointer)
+	ccmd.Flags().BoolVar(&root.Gorm, "gorm", false, FlagsGorm)
+	ccmd.Flags().BoolVar(&root.Service, "srv", false, FlagsSrv)
+	ccmd.Flags().StringVar(&root.Datasource, "ds", "", FlagsDs)
+	ccmd.Flags().StringVar(&root.Table, "table", "", FlagsTable)
+	ccmd.Flags().StringVar(&root.Job, "job", "", FlagsJob)
 	test := ccmd.Flags()
 	test.BoolVar(&root.Test, "test", false, "")
 	if err := test.MarkHidden("test"); err != nil {
@@ -97,6 +95,10 @@ func execute() error {
 		return err
 	}
 	if err := checkProject(); err != nil {
+
+		return err
+	}
+	if err := checkYaml(); err != nil {
 
 		return err
 	}

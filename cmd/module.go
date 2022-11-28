@@ -15,7 +15,7 @@ import (
 
 func checkModule() error {
 
-	file := "go.mod"
+	file := GoMod
 	if exist, err := jfile.Exist(file); err != nil {
 
 		return err
@@ -51,7 +51,7 @@ func checkModule() error {
 
 func loadModFile() (string, error) {
 
-	if b, err := jfile.Load("go.mod"); err != nil {
+	if b, err := jfile.Load(GoMod); err != nil {
 
 		return "", err
 	} else {
@@ -65,7 +65,12 @@ func checkModInit(str string) error {
 	pkg := make([]string, 0)
 	if root.Project {
 
-		pkg = append(pkg, "github.com/gin-gonic/gin")
+		pkg = append(pkg, ModuleGin)
+
+		if root.Yaml {
+
+			pkg = append(pkg, ModuleYaml)
+		}
 
 		if root.Service && !root.Gorm {
 
@@ -81,13 +86,13 @@ func checkModInit(str string) error {
 
 						switch t, _ := jsql.ParseDBType(m["type"]); t {
 						case jsql.MySql:
-							pkg = append(pkg, "github.com/go-sql-driver/mysql")
+							pkg = append(pkg, ModuleMySql)
 						case jsql.MSSql:
-							pkg = append(pkg, "github.com/denisenkom/go-mssqldb")
+							pkg = append(pkg, ModuleMSSql)
 						case jsql.Oracle:
-							pkg = append(pkg, "github.com/godror/godror")
+							pkg = append(pkg, ModuleOracle)
 						case jsql.PostgreSql:
-							pkg = append(pkg, "github.com/lib/pq")
+							pkg = append(pkg, ModulePostgreSql)
 						}
 					}
 				}
@@ -98,19 +103,20 @@ func checkModInit(str string) error {
 
 		if root.Gorm {
 
-			pkg = append(pkg, "gorm.io/gorm")
+			pkg = append(pkg, ModuleGorm)
 		} else {
 
-			pkg = append(pkg, "github.com/xjustloveux/jgo")
-			pkg = append(pkg, "github.com/fatih/structs")
+			pkg = append(pkg, ModuleJGo)
+			pkg = append(pkg, ModuleStructs)
 		}
 	}
 	if root.Schedule && (!root.Service || root.Gorm) {
 
-		pkg = append(pkg, "github.com/xjustloveux/jgo")
+		pkg = append(pkg, ModuleJGo)
 	}
 	l := len(fmt.Sprint("module ", root.Name))
 	ckStr := str[l:]
+	tidy := false
 	for _, v := range pkg {
 
 		if b, err := regexp.MatchString(v, ckStr); err != nil {
@@ -126,6 +132,14 @@ func checkModInit(str string) error {
 
 				return err
 			}
+			tidy = true
+		}
+	}
+	if tidy {
+
+		if err := runComm(exec.Command("go", "mod", "tidy")); err != nil {
+
+			return err
 		}
 	}
 	return nil

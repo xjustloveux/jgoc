@@ -28,7 +28,19 @@ func TestCreate(t *testing.T) {
 		return
 	}
 	jfile.RegisterCodec(jfile.Yaml.String(), yaml.Codec{})
-	args := []string{"--name", "test", "--pro", "--mod", "--srv", "--sch", "--test"}
+	args := []string{"--name", "test", "--pro", "--test"}
+	Execute(args)
+	args = []string{"--name", "test", "--pro", "--mod", "--test"}
+	Execute(args)
+	args = []string{"--name", "test", "--pro", "--mod", "--srv", "--test"}
+	Execute(args)
+	args = []string{"--name", "test", "--pro", "--mod", "--srv", "--sch", "--test"}
+	Execute(args)
+	args = []string{"--name", "test", "--mod", "--test"}
+	Execute(args)
+	args = []string{"--name", "test", "--mod", "--srv", "--test"}
+	Execute(args)
+	args = []string{"--name", "test", "--sch", "--test"}
 	Execute(args)
 	args = []string{"--name", "test", "--env", "dev", "--pro", "--mod", "--srv", "--sch", "--test"}
 	Execute(args)

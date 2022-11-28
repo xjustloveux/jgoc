@@ -1,3 +1,10 @@
+# v1.0.8 (2022.11.28)
+New Features：
+* Auto init Middleware yaml when init project and config file format is yaml
+
+Bug Fixes：
+* Fixed project install sort bug
+
 # v1.0.7 (2022.11.25)
 Bug Fixes：
 * Fixed install module bug

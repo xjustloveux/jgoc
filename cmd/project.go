@@ -29,9 +29,6 @@ func checkProject() error {
 		|---router.go
 		global
 		|---variable.go
-		job
-		|---init.go
-		|---job001.go
 		service
 		|---a
 			|---a101srv
@@ -180,10 +177,7 @@ func getProjectFileContent(path string) string {
 
 	switch path {
 	case "controller/a/a101ctr/a101.go":
-		module := []string{`
-	"` + root.Name + `/service/a/a101srv"`, `
-	"github.com/gin-gonic/gin"`, `
-	"net/http"`}
+		module := []string{fmt.Sprintf(ProCtrA101Import1, root.Name), fmt.Sprintf(ProCtrA101Import2, ModuleGin), ProCtrA101Import3}
 		sort.Slice(module, func(i, j int) bool {
 			re := []string{" ", "　", "	", "_", `
 `}
@@ -199,97 +193,47 @@ func getProjectFileContent(path string) string {
 		for _, v := range module {
 			mod += v
 		}
-		return `package a101ctr
-
-import (` + mod + `
-)
-
-func Example(ctx *gin.Context) {
-
-	message := a101srv.DoSomething()
-	ctx.JSON(http.StatusOK, gin.H{"success": true, "message": message})
-}
-`
+		return fmt.Sprintf(ProCtrA101, mod)
 	case "controller/a/router.go":
-		return `package a
-
-import (
-	"` + root.Name + `/controller/a/a101ctr"
-	"` + root.Name + `/global"
-)
-
-func Init() {
-	a := global.Router.Group("a")
-	{
-		a101 := a.Group("a101")
-		{
-			a101.GET("", a101ctr.Example)
-		}
-	}
-}
-`
+		return fmt.Sprintf(ProCtrARouter, root.Name, root.Name)
 	case "controller/router.go":
-		return `package controller
-
-import (
-	"` + root.Name + `/controller/a"
-	"` + root.Name + `/global"
-)
-
-func Init() error {
-	a.Init()
-	return global.Router.Run(":8080")
-}
-`
+		return fmt.Sprintf(ProCtrRouter, root.Name, root.Name)
 	case "global/variable.go":
-		return `package global
-
-import "github.com/gin-gonic/gin"
-
-var (
-	Router = gin.Default()
-)
-`
+		return fmt.Sprintf(ProVar, ModuleGin)
 	case "service/a/a101srv/a101.go":
-		return `package a101srv
-
-func DoSomething() string {
-
-	// Do Something
-	return "Example"
-}
-`
+		return ProSrvA101
 	case "main.go":
-		module := []string{`
-	"` + root.Name + `/controller"`, `
-	"fmt"`}
+		module := []string{fmt.Sprintf(ProMainImport1, root.Name), ProMainImport2}
+		yamlInit := ""
+		if root.Yaml {
+
+			module = append(module, fmt.Sprintf(ProMainImportYaml, root.Name))
+			yamlInit = ProMainInitYaml
+		}
 		jobInit := ""
 		if root.Schedule {
 
-			module = append(module, `
-	"`+root.Name+`/job"`)
-			module = append(module, `
-	"github.com/xjustloveux/jgo/jcron"`)
-			jobInit = `
-	if err := job.Init(); err != nil {
-		
-		fmt.Println(err)
-	}
-	if err := jcron.Init(); err != nil {
+			module = append(module, fmt.Sprintf(ProMainImportJob1, root.Name))
+			module = append(module, fmt.Sprintf(ProMainImportJob2, ModuleJGo))
+			if root.Yaml {
 
-		fmt.Println(err)
-	}`
+				jobInit = fmt.Sprintf(ProMainInitJob, ProMainInitJobYaml)
+			} else {
+
+				jobInit = fmt.Sprintf(ProMainInitJob, "")
+			}
 		}
 		sqlInit := ""
 		if root.Service && !root.Gorm {
 
-			module = append(module, `
-	"github.com/xjustloveux/jgo/jsql"`)
-			sqlInit = `
-	if err := jsql.Init(); err != nil {
+			module = append(module, fmt.Sprintf(ProMainImportJGoSql, ModuleJGo))
+			if root.Yaml {
 
-		fmt.Println(err)
-	}`
+				sqlInit = fmt.Sprintf(ProMainInitSql, ProMainInitSqlYaml)
+			} else {
+
+				sqlInit = fmt.Sprintf(ProMainInitSql, "")
+			}
 			ds := jsql.GetDataSource()
 			for k, v := range ds {
 
@@ -299,17 +243,13 @@ func DoSomething() string {
 
 						switch t, _ := jsql.ParseDBType(m["type"]); t {
 						case jsql.MySql:
-							module = append(module, `
-	_ "github.com/go-sql-driver/mysql"`)
+							module = append(module, fmt.Sprintf(ProMainImportSql, ModuleMySql))
 						case jsql.MSSql:
-							module = append(module, `
-	_ "github.com/denisenkom/go-mssqldb"`)
+							module = append(module, fmt.Sprintf(ProMainImportSql, ModuleMSSql))
 						case jsql.Oracle:
-							module = append(module, `
-	_ "github.com/godror/godror"`)
+							module = append(module, fmt.Sprintf(ProMainImportSql, ModuleOracle))
 						case jsql.PostgreSql:
-							module = append(module, `
-	_ "github.com/lib/pq"`)
+							module = append(module, fmt.Sprintf(ProMainImportSql, ModulePostgreSql))
 						}
 					}
 				}
@@ -330,19 +270,7 @@ func DoSomething() string {
 		for _, v := range module {
 			mod += v
 		}
-		return `package main
-
-import (` + mod + `
-)
-
-func main() {
-	` + jobInit + sqlInit + `
-	if err := controller.Init(); err != nil {
-		
-		fmt.Println(err)
-	}
-}
-`
+		return fmt.Sprintf(ProMain, mod, yamlInit, sqlInit, jobInit)
 	}
 	return ""
 }

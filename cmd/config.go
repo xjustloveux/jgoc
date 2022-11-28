@@ -40,6 +40,7 @@ func checkConfig() error {
 
 func checkConfigFile() error {
 
+	root.Yaml = false
 	fileName := "config.json"
 	path := fmt.Sprint("./config/", fileName)
 	if exist, err := jfile.Exist(path); err != nil {
@@ -79,6 +80,7 @@ func checkConfigFile() error {
 
 		jPrint(fmt.Sprint(path, " not exist"))
 	}
+	root.Yaml = true
 	fileName = "config.yaml"
 	path = fmt.Sprint("./config/", fileName)
 	if exist, err := jfile.Exist(path); err != nil {

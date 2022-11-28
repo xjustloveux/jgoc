@@ -79,19 +79,16 @@ func getServiceTableContent(dsModName, dsSrvName, dsName string, table model.Tab
 
 		return getGormContent(dsModName, dsSrvName, dsName, table)
 	}
-	return getJgoContent(dsModName, dsSrvName, dsName, table)
+	return getJGoContent(dsModName, dsSrvName, dsName, table)
 }
 
-func getJgoContent(dsModName, dsSrvName, dsName string, table model.Table) string {
+func getJGoContent(dsModName, dsSrvName, dsName string, table model.Table) string {
 
 	tableNameUCC := strToUCC(table.Name)
 	tableNameLCC := strToLCC(table.Name)
 	tableComment := table.Schema[0].TableComment
-	model := fmt.Sprint(dsModName, ".", tableNameUCC)
-	module := []string{`
-	"` + root.Name + `/model/` + dsModName + `"`, `
-	"github.com/fatih/structs"`, `
-	"github.com/xjustloveux/jgo/jsql"`}
+	tableModel := fmt.Sprint(dsModName, ".", tableNameUCC)
+	module := []string{fmt.Sprintf(SrvImport1, root.Name, dsModName), fmt.Sprintf(SrvImport2, ModuleStructs), fmt.Sprintf(SrvJGoImport, ModuleJGo)}
 	sort.Slice(module, func(i, j int) bool {
 		re := []string{" ", "　", "	", "_", `
 `}
@@ -107,129 +104,11 @@ func getJgoContent(dsModName, dsSrvName, dsName string, table model.Table) strin
 	for _, v := range module {
 		mod += v
 	}
-	return `package ` + dsSrvName + `
-
-import (` + mod + `
-)
-
-// ` + tableNameUCC + ` ` + tableComment + `
-var ` + tableNameUCC + ` = &` + tableNameLCC + `{
-	ds:    "` + dsName + `",
-	table: "` + table.Name + `",
-}
-
-type ` + tableNameLCC + ` struct {
-	ds    string
-	table string
-}
-
-// Create insert data
-func (srv *` + tableNameLCC + `) Create(data ` + model + `) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		DSKey: srv.ds,
-		Table: srv.table,
-		Col:   structs.Map(data),
-	}).Insert()
-}
-
-// CreateTx insert data for tx
-func (srv *` + tableNameLCC + `) CreateTx(agent *jsql.Agent, data ` + model + `) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		Agent: agent,
-		DSKey: srv.ds,
-		Table: srv.table,
-		Col:   structs.Map(data),
-	}).Insert()
-}
-
-// FindAll query all data
-func (srv *` + tableNameLCC + `) FindAll(param ...*jsql.Param) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		DSKey:  srv.ds,
-		Table:  srv.table,
-		Params: param,
-	}).Query()
-}
-
-// FindAllTx query all data for tx
-func (srv *` + tableNameLCC + `) FindAllTx(agent *jsql.Agent, param ...*jsql.Param) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		Agent:  agent,
-		DSKey:  srv.ds,
-		Table:  srv.table,
-		Params: param,
-	}).QueryTx()
-}
-
-// FindFirst query first data
-func (srv *` + tableNameLCC + `) FindFirst(param ...*jsql.Param) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		DSKey:  srv.ds,
-		Table:  srv.table,
-		Params: param,
-	}).QueryRow()
-}
-
-// FindFirstTx query first data for tx
-func (srv *` + tableNameLCC + `) FindFirstTx(agent *jsql.Agent, param ...*jsql.Param) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		Agent:  agent,
-		DSKey:  srv.ds,
-		Table:  srv.table,
-		Params: param,
-	}).QueryRowTx()
-}
-
-// Update update data
-func (srv *` + tableNameLCC + `) Update(data map[string]interface{}, param ...*jsql.Param) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		DSKey:  srv.ds,
-		Table:  srv.table,
-		Col:    data,
-		Params: param,
-	}).Update()
-}
-
-// UpdateTx update data for tx
-func (srv *` + tableNameLCC + `) UpdateTx(agent *jsql.Agent, data map[string]interface{}, param ...*jsql.Param) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		Agent:  agent,
-		DSKey:  srv.ds,
-		Table:  srv.table,
-		Col:    data,
-		Params: param,
-	}).UpdateTx()
-}
-
-// Delete delete data
-func (srv *` + tableNameLCC + `) Delete(param ...*jsql.Param) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		DSKey:  srv.ds,
-		Table:  srv.table,
-		Params: param,
-	}).Delete()
-}
-
-// DeleteTx delete data for tx
-func (srv *` + tableNameLCC + `) DeleteTx(agent *jsql.Agent, param ...*jsql.Param) (jsql.Result, error) {
-
-	return (&jsql.TableAgent{
-		Agent:  agent,
-		DSKey:  srv.ds,
-		Table:  srv.table,
-		Params: param,
-	}).DeleteTx()
-}
-`
+	srv := SrvJGo
+	srv = strings.Replace(srv, `%UCC%`, tableNameUCC, -1)
+	srv = strings.Replace(srv, `%LCC%`, tableNameLCC, -1)
+	srv = strings.Replace(srv, `%model%`, tableModel, -1)
+	return fmt.Sprintf(srv, dsSrvName, mod, tableComment, dsName, table.Name)
 }
 
 func getGormContent(dsModName, dsSrvName, dsName string, table model.Table) string {
@@ -237,11 +116,8 @@ func getGormContent(dsModName, dsSrvName, dsName string, table model.Table) stri
 	tableNameUCC := strToUCC(table.Name)
 	tableNameLCC := strToLCC(table.Name)
 	tableComment := table.Schema[0].TableComment
-	model := fmt.Sprint(dsModName, ".", tableNameUCC)
-	module := []string{`
-	"` + root.Name + `/model/` + dsModName + `"`, `
-	"fmt"`, `
-	"gorm.io/gorm"`}
+	tableModel := fmt.Sprint(dsModName, ".", tableNameUCC)
+	module := []string{fmt.Sprintf(SrvImport1, root.Name, dsModName), fmt.Sprintf(SrvImport2, "fmt"), fmt.Sprintf(SrvImport2, ModuleGorm)}
 	sort.Slice(module, func(i, j int) bool {
 		re := []string{" ", "　", "	", "_", `
 `}
@@ -257,80 +133,9 @@ func getGormContent(dsModName, dsSrvName, dsName string, table model.Table) stri
 	for _, v := range module {
 		mod += v
 	}
-	return `package ` + dsSrvName + `
-
-import (` + mod + `
-)
-
-// ` + tableNameUCC + ` ` + tableComment + `
-var ` + tableNameUCC + ` = &` + tableNameLCC + `{
-	table: "` + table.Name + `",
-}
-
-type ` + tableNameLCC + ` struct {
-	table string
-}
-
-// Create insert data
-func (srv *` + tableNameLCC + `) Create(db *gorm.DB, data ` + model + `) error {
-
-	return db.Table(srv.table).Create(&data).Error
-}
-
-// FindAll query all data
-func (srv *` + tableNameLCC + `) FindAll(db *gorm.DB, data []` + model + `, param ...map[string]interface{}) error {
-
-	db = db.Table(srv.table)
-	for _, v1 := range param {
-
-		for k2, v2 := range v1 {
-
-			db = db.Where(fmt.Sprint(k2, " = ?"), v2)
-		}
-	}
-	return db.Find(&data).Error
-}
-
-// FindFirst query first data
-func (srv *` + tableNameLCC + `) FindFirst(db *gorm.DB, data ` + model + `, param ...map[string]interface{}) error {
-
-	db = db.Table(srv.table)
-	for _, v1 := range param {
-
-		for k2, v2 := range v1 {
-
-			db = db.Where(fmt.Sprint(k2, " = ?"), v2)
-		}
-	}
-	return db.First(&data).Error
-}
-
-// Update update data
-func (srv *` + tableNameLCC + `) Update(db *gorm.DB, data map[string]interface{}, param ...map[string]interface{}) error {
-
-	db = db.Table(srv.table).Where("1 = 1")
-	for _, v1 := range param {
-
-		for k2, v2 := range v1 {
-
-			db = db.Where(fmt.Sprint(k2, " = ?"), v2)
-		}
-	}
-	return db.Updates(&data).Error
-}
-
-// Delete delete data
-func (srv *` + tableNameLCC + `) Delete(db *gorm.DB, param ...map[string]interface{}) error {
-
-	db = db.Unscoped().Table(srv.table).Where("1 = 1")
-	for _, v1 := range param {
-
-		for k2, v2 := range v1 {
-
-			db = db.Where(fmt.Sprint(k2, " = ?"), v2)
-		}
-	}
-	return db.Delete(&` + model + `{}).Error
-}
-`
+	srv := SrvGorm
+	srv = strings.Replace(srv, `%UCC%`, tableNameUCC, -1)
+	srv = strings.Replace(srv, `%LCC%`, tableNameLCC, -1)
+	srv = strings.Replace(srv, `%model%`, tableModel, -1)
+	return fmt.Sprintf(srv, dsSrvName, mod, tableComment, table.Name)
 }

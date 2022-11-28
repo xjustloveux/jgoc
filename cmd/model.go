@@ -84,9 +84,7 @@ func getModelTableContent(dsName string, table model.Table) string {
 	module := ""
 	if haveTimeCol(table) {
 
-		module = `
-
-import "time"`
+		module = ModelImport
 	}
 	tableName := strToUCC(table.Name)
 	tableComment := ""
@@ -99,11 +97,7 @@ import "time"`
 
 		col += getColumnContent(v)
 	}
-	return `package ` + dsName + module + `
-
-// ` + tableName + ` ` + tableComment + `
-type ` + tableName + ` struct {` + col + `
-}`
+	return fmt.Sprintf(Model, dsName, module, tableName, tableComment, tableName, col)
 }
 
 func haveTimeCol(table model.Table) bool {

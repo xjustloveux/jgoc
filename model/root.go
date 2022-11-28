@@ -17,4 +17,5 @@ type Root struct {
 	Schedule   bool
 	Job        string
 	Test       bool
+	Yaml       bool
 }

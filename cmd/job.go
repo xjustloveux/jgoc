@@ -153,31 +153,7 @@ func getJobInitContent() string {
 		add += `
 		&` + strToL(v) + `{},`
 	}
-	return `package job
-
-import (
-	"github.com/xjustloveux/jgo/jcron"
-)
-
-type job interface {
-	Name() string
-	Run(map[string]interface{})
-}
-
-func Init() error {
-
-	jobs := []job{` + add + `
-	}
-	for _, v := range jobs {
-
-		if err := jcron.AddJob(v.Name(), v); err != nil {
-
-			return err
-		}
-	}
-	return nil
-}
-`
+	return fmt.Sprintf(JobInit, ModuleJGo, add)
 }
 
 func createJobs() error {
@@ -214,22 +190,5 @@ func createJobs() error {
 
 func getJobContent(n string) string {
 
-	return `package job
-
-import "fmt"
-
-type ` + n + ` struct{}
-
-func (j *` + n + `) Name() string {
-
-	return "` + n + `"
-}
-
-func (j *` + n + `) Run(map[string]interface{}) {
-
-	fmt.Println("` + n + `: start")
-	// Do Something
-	fmt.Println("` + n + `: end")
-}
-`
+	return strings.Replace(Job, `%n%`, n, -1)
 }

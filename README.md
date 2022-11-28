@@ -65,7 +65,7 @@ jgoc --name example.com/helloworld --mod
 ```
 #### create model, service
 ```shell
-jgoc --name example.com/helloworld --pro --srv
+jgoc --name example.com/helloworld --mod --srv
 ```
 #### create schedule
 ```shell
