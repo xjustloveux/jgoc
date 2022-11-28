@@ -1,3 +1,7 @@
+# v1.0.11 (2022.11.28)
+Changes：
+* Update JGo version to v1.3.2
+
 # v1.0.10 (2022.11.28)
 Bug Fixes：
 * Fixed project import jfile bug
