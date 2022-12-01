@@ -1,3 +1,10 @@
+# v1.0.12 (2022.12.01)
+Changes：
+* Update JGo version to v1.3.3
+
+Bug Fixes：
+* Fixed create model structs tag bug
+
 # v1.0.11 (2022.11.28)
 Changes：
 * Update JGo version to v1.3.2

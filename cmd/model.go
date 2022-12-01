@@ -242,6 +242,7 @@ func getColType(col jsql.TableSchema) string {
 func getColJson(col jsql.TableSchema) string {
 
 	gorm := ""
+	sts := ""
 	if root.Gorm {
 
 		v := defValCheck(col)
@@ -275,8 +276,11 @@ func getColJson(col jsql.TableSchema) string {
 
 			gorm += `"`
 		}
+	} else {
+
+		sts = fmt.Sprint(` structs:"`, col.ColumnName, `"`)
 	}
-	return "`json:\"" + col.ColumnName + "\"" + gorm + "`"
+	return fmt.Sprint("`json:\"", col.ColumnName, "\"", sts, gorm, "`")
 }
 
 func defValCheck(col jsql.TableSchema) string {
