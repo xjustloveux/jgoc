@@ -9,7 +9,7 @@ const (
 	CcmdLong  = `JGoC provides an easier way to create Go project, model and schedule.
 JGoC goal is to simplify the created project framework, model and schedule steps while providing variant customization options for all steps.
 Check out github for more information: https://github.com/xjustloveux/jgof`
-	CcmdVer = `v1.0.12`
+	CcmdVer = `v1.0.13`
 
 	FlagsName    = `module name`
 	FlagsEnv     = `jgo config environment value`
@@ -336,7 +336,7 @@ func (srv *%LCC%) Create(db *gorm.DB, data %model%) error {
 }
 
 // FindAll query all data
-func (srv *%LCC%) FindAll(db *gorm.DB, data []%model%, param ...map[string]interface{}) error {
+func (srv *%LCC%) FindAll(db *gorm.DB, data *[]%model%, param ...map[string]interface{}) error {
 
 	db = db.Table(srv.table)
 	for _, v1 := range param {
@@ -346,11 +346,11 @@ func (srv *%LCC%) FindAll(db *gorm.DB, data []%model%, param ...map[string]inter
 			db = db.Where(fmt.Sprint(k2, " = ?"), v2)
 		}
 	}
-	return db.Find(&data).Error
+	return db.Find(data).Error
 }
 
 // FindFirst query first data
-func (srv *%LCC%) FindFirst(db *gorm.DB, data %model%, param ...map[string]interface{}) error {
+func (srv *%LCC%) FindFirst(db *gorm.DB, data *%model%, param ...map[string]interface{}) error {
 
 	db = db.Table(srv.table)
 	for _, v1 := range param {
@@ -360,7 +360,7 @@ func (srv *%LCC%) FindFirst(db *gorm.DB, data %model%, param ...map[string]inter
 			db = db.Where(fmt.Sprint(k2, " = ?"), v2)
 		}
 	}
-	return db.First(&data).Error
+	return db.First(data).Error
 }
 
 // Update update data

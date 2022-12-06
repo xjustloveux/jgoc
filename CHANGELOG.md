@@ -1,3 +1,10 @@
+# v1.0.13 (2022.12.06)
+Changes：
+* Update JGo version to v1.3.10
+
+Bug Fixes：
+* Fixed gorm service bug
+
 # v1.0.12 (2022.12.01)
 Changes：
 * Update JGo version to v1.3.3
