@@ -1,3 +1,7 @@
+# v1.0.14 (2022.12.08)
+Bug Fixes：
+* Fixed postgresql gorm tag bug
+
 # v1.0.13 (2022.12.06)
 Changes：
 * Update JGo version to v1.3.10

@@ -287,6 +287,10 @@ func defValCheck(col jsql.TableSchema) string {
 
 	val := col.DataDefault
 	t := strings.ToLower(col.DataType)
+	if strings.HasPrefix(val, "nextval") {
+
+		return ""
+	}
 	switch t {
 	case "tinyint":
 		fallthrough
