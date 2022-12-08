@@ -12,6 +12,8 @@ import (
 	"strings"
 )
 
+const nextval = "nextval"
+
 func checkModel() error {
 
 	if !root.Model {
@@ -248,7 +250,7 @@ func getColJson(col jsql.TableSchema) string {
 		v := defValCheck(col)
 		d := len(v) > 0
 		k := col.PrimaryKey != nil
-		i := col.IsIdentity == "YES"
+		i := col.IsIdentity == "YES" || strings.HasPrefix(col.DataDefault, nextval)
 		g := d || k
 		if g {
 
@@ -287,7 +289,7 @@ func defValCheck(col jsql.TableSchema) string {
 
 	val := col.DataDefault
 	t := strings.ToLower(col.DataType)
-	if strings.HasPrefix(val, "nextval") {
+	if strings.HasPrefix(val, nextval) {
 
 		return ""
 	}
