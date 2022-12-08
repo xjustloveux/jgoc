@@ -1,3 +1,7 @@
+# v1.0.17 (2022.12.08)
+Changes：
+* Model always add `structs` tag
+
 # v1.0.16 (2022.12.08)
 Bug Fixes：
 * Fixed gorm service bug

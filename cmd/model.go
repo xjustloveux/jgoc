@@ -278,10 +278,8 @@ func getColJson(col jsql.TableSchema) string {
 
 			gorm += `"`
 		}
-	} else {
-
-		sts = fmt.Sprint(` structs:"`, col.ColumnName, `"`)
 	}
+	sts = fmt.Sprint(` structs:"`, col.ColumnName, `"`)
 	return fmt.Sprint("`json:\"", col.ColumnName, "\"", sts, gorm, "`")
 }
 
