@@ -1,3 +1,7 @@
+# v1.0.16 (2022.12.08)
+Bug Fixes：
+* Fixed gorm service bug
+
 # v1.0.15 (2022.12.08)
 Bug Fixes：
 * Fixed postgresql gorm autoIncrement tag bug
