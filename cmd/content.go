@@ -9,7 +9,7 @@ const (
 	CcmdLong  = `JGoC provides an easier way to create Go project, model and schedule.
 JGoC goal is to simplify the created project framework, model and schedule steps while providing variant customization options for all steps.
 Check out github for more information: https://github.com/xjustloveux/jgof`
-	CcmdVer = `v1.0.17`
+	CcmdVer = `v1.0.18`
 
 	FlagsName    = `module name`
 	FlagsEnv     = `jgo config environment value`
@@ -208,6 +208,18 @@ type %LCC% struct {
 	table string
 }
 
+// Ds return ds
+func (srv *%LCC%) Ds() string {
+
+	return srv.ds
+}
+
+// Table return table name
+func (srv *%LCC%) Table() string {
+
+	return srv.table
+}
+
 // Create insert data
 func (srv *%LCC%) Create(data %model%) (jsql.Result, error) {
 
@@ -327,6 +339,12 @@ var %UCC% = &%LCC%{
 
 type %LCC% struct {
 	table string
+}
+
+// Table return table name
+func (srv *%LCC%) Table() string {
+
+	return srv.table
 }
 
 // Create insert data

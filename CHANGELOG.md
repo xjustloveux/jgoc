@@ -1,3 +1,7 @@
+# v1.0.18 (2022.12.09)
+New Features：
+* Service add Table and Ds function
+
 # v1.0.17 (2022.12.08)
 Changes：
 * Model always add `structs` tag
