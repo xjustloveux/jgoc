@@ -12,8 +12,6 @@ import (
 	"strings"
 )
 
-const nextval = "nextval"
-
 func checkModel() error {
 
 	if !root.Model {
@@ -250,7 +248,7 @@ func getColJson(col jsql.TableSchema) string {
 		v := defValCheck(col)
 		d := len(v) > 0
 		k := col.PrimaryKey != nil
-		i := col.IsIdentity == "YES" || strings.HasPrefix(col.DataDefault, nextval)
+		i := col.IsIdentity == "YES" || isPosgreSqlNextval(col.DataDefault)
 		g := d || k
 		if g {
 
@@ -287,7 +285,7 @@ func defValCheck(col jsql.TableSchema) string {
 
 	val := col.DataDefault
 	t := strings.ToLower(col.DataType)
-	if strings.HasPrefix(val, nextval) {
+	if isPosgreSqlNextval(val) {
 
 		return ""
 	}
@@ -321,4 +319,15 @@ func defValCheck(col jsql.TableSchema) string {
 		val = strings.Replace(val, ")", "", -1)
 	}
 	return val
+}
+
+func isPosgreSqlNextval(val string) bool {
+
+	if b, err := regexp.MatchString("^nextval\\('.*'::regclass\\)", val); err != nil {
+
+		return false
+	} else {
+
+		return b
+	}
 }

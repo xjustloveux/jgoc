@@ -1,3 +1,7 @@
+# v1.0.19 (2022.12.09)
+Changes：
+* Change verify posgreSql nextval method
+
 # v1.0.18 (2022.12.09)
 New Features：
 * Service add Table and Ds function
