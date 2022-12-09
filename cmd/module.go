@@ -128,9 +128,12 @@ func checkModInit(str string) error {
 		} else {
 
 			jPrint(fmt.Sprint("package(", v, ") not exist"))
-			if err = runComm(exec.Command("go", "get", "-u", v)); err != nil {
+			if !root.Test {
 
-				return err
+				if err = runComm(exec.Command("go", "get", "-u", v)); err != nil {
+
+					return err
+				}
 			}
 		}
 	}

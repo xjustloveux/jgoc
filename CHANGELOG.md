@@ -1,3 +1,7 @@
+# v1.0.20 (2022.12.09)
+Changes：
+* Skip go test install module
+
 # v1.0.19 (2022.12.09)
 Changes：
 * Change verify posgreSql nextval method
