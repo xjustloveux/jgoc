@@ -1,3 +1,7 @@
+# v1.0.22 (2022.12.12)
+Bug Fixes：
+* Fixed check folder bug
+
 # v1.0.21 (2022.12.12)
 New Features：
 * Add project folder created check

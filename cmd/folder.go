@@ -68,7 +68,13 @@ func checkFolder() error {
 
 func chdir(path, folderName string) error {
 
-	path = strings.Trim(path, "/")
+	if strings.HasPrefix(path, "/") {
+
+		path = fmt.Sprint("/", strings.Trim(path, "/"))
+	} else {
+
+		path = strings.Trim(path, "/")
+	}
 	path = strings.Trim(path, "\\")
 	newPath := fmt.Sprint(path, "/", folderName)
 	jPrint(fmt.Sprint("changes the current working directory to ", newPath))
