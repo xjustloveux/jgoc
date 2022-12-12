@@ -90,6 +90,10 @@ func execute() error {
 
 		return err
 	}
+	if err := checkFolder(); err != nil {
+
+		return err
+	}
 	if err := checkModule(); err != nil {
 
 		return err

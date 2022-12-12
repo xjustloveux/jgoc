@@ -18,4 +18,5 @@ type Root struct {
 	Job        string
 	Test       bool
 	Yaml       bool
+	CreateChk  bool
 }

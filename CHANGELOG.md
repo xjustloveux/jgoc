@@ -1,3 +1,7 @@
+# v1.0.21 (2022.12.12)
+New Features：
+* Add project folder created check
+
 # v1.0.20 (2022.12.09)
 Changes：
 * Skip go test install module

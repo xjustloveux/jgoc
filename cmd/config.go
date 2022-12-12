@@ -15,8 +15,11 @@ func checkConfig() error {
 
 	if !root.Model && !root.Schedule {
 
+		root.Yaml = false
+		root.CreateChk = true
 		return nil
 	}
+	root.CreateChk = false
 	if err := checkConfigFile(); err != nil {
 
 		return err

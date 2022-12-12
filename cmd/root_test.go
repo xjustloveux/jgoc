@@ -11,6 +11,7 @@ import (
 	"github.com/xjustloveux/jgo/jfile"
 	"github.com/xjustloveux/jgoc/yaml"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -22,13 +23,29 @@ func TestCreate(t *testing.T) {
 		t.Error("jError must be return error")
 	}
 	path, _ := os.Getwd()
-	if err := os.Chdir(strings.Replace(path, "cmd", "test", -1)); err != nil {
+	testPath := strings.Replace(path, "cmd", "test", -1)
+	rootPath, _ := filepath.Split(path)
+	if err := os.Chdir(rootPath); err != nil {
+
+		t.Error(err)
+		return
+	}
+	args := []string{"--name", "test2", "--pro", "--test"}
+	Execute(args)
+	if err := os.Chdir(rootPath); err != nil {
+
+		t.Error(err)
+		return
+	}
+	Execute(args)
+	Execute(args)
+	if err := os.Chdir(testPath); err != nil {
 
 		t.Error(err)
 		return
 	}
 	jfile.RegisterCodec(jfile.Yaml.String(), yaml.Codec{})
-	args := []string{"--name", "test", "--pro", "--test"}
+	args = []string{"--name", "test", "--pro", "--test"}
 	Execute(args)
 	args = []string{"--name", "test", "--pro", "--mod", "--test"}
 	Execute(args)
