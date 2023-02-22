@@ -1,3 +1,7 @@
+# v1.0.23 (2023.02.22)
+Bug Fixes：
+* Fixed postgresql model default value bug
+
 # v1.0.22 (2022.12.12)
 Bug Fixes：
 * Fixed check folder bug

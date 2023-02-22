@@ -8,7 +8,7 @@ require (
 	github.com/godror/godror v0.34.0
 	github.com/lib/pq v1.10.7
 	github.com/spf13/cobra v1.6.1
-	github.com/xjustloveux/jgo v1.3.13
+	github.com/xjustloveux/jgo v1.3.20
 	gopkg.in/yaml.v2 v2.4.0
 )
 

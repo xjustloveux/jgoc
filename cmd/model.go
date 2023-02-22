@@ -248,7 +248,7 @@ func getColJson(col jsql.TableSchema) string {
 		v := defValCheck(col)
 		d := len(v) > 0
 		k := col.PrimaryKey != nil
-		i := col.IsIdentity == "YES" || isPosgreSqlNextval(col.DataDefault)
+		i := col.IsIdentity == "YES" || isPostgreSqlNextVal(col.DataDefault)
 		g := d || k
 		if g {
 
@@ -285,7 +285,7 @@ func defValCheck(col jsql.TableSchema) string {
 
 	val := col.DataDefault
 	t := strings.ToLower(col.DataType)
-	if isPosgreSqlNextval(val) {
+	if isPostgreSqlNextVal(val) {
 
 		return ""
 	}
@@ -318,10 +318,10 @@ func defValCheck(col jsql.TableSchema) string {
 		val = strings.Replace(val, "(", "", -1)
 		val = strings.Replace(val, ")", "", -1)
 	}
-	return val
+	return chkPostgreSqlDefVal(val)
 }
 
-func isPosgreSqlNextval(val string) bool {
+func isPostgreSqlNextVal(val string) bool {
 
 	if b, err := regexp.MatchString("^nextval\\('.*'::regclass\\)", val); err != nil {
 
@@ -329,5 +329,16 @@ func isPosgreSqlNextval(val string) bool {
 	} else {
 
 		return b
+	}
+}
+
+func chkPostgreSqlDefVal(val string) string {
+
+	if b, err := regexp.MatchString(".*::[a-zA-Z].*[a-zA-Z]$", val); err == nil && b {
+
+		return val[:strings.LastIndex(val, "::")]
+	} else {
+
+		return val
 	}
 }
