@@ -8,8 +8,8 @@ const (
 	CcmdShort = `create project, model or schedule as fast and easily as possible`
 	CcmdLong  = `JGoC provides an easier way to create Go project, model and schedule.
 JGoC goal is to simplify the created project framework, model and schedule steps while providing variant customization options for all steps.
-Check out github for more information: https://github.com/xjustloveux/jgof`
-	CcmdVer = `v1.0.22`
+Check out github for more information: https://github.com/xjustloveux/jgoc`
+	CcmdVer = `v1.0.24`
 
 	FlagsName    = `module name`
 	FlagsEnv     = `jgo config environment value`
@@ -26,7 +26,7 @@ Check out github for more information: https://github.com/xjustloveux/jgof`
 	GoMod = `go.mod`
 
 	ModuleGin        = `github.com/gin-gonic/gin`
-	ModuleYaml       = `gopkg.in/yaml.v2`
+	ModuleYaml       = `gopkg.in/yaml.v3`
 	ModuleMySql      = `github.com/go-sql-driver/mysql`
 	ModuleMSSql      = `github.com/denisenkom/go-mssqldb`
 	ModuleOracle     = `github.com/godror/godror`
@@ -164,16 +164,16 @@ func (Codec) Decode(b []byte, v map[string]interface{}) error {
 	return yaml.Unmarshal(b, &v)
 }
 `
-	YamlYaml2 = `package yaml
+	YamlYaml3 = `package yaml
 
-import yamlv2 "%v"
+import yamlv3 "%v"
 
 var yaml = struct {
 	Marshal   func(in interface{}) (out []byte, err error)
 	Unmarshal func(in []byte, out interface{}) (err error)
 }{
-	Marshal:   yamlv2.Marshal,
-	Unmarshal: yamlv2.Unmarshal,
+	Marshal:   yamlv3.Marshal,
+	Unmarshal: yamlv3.Unmarshal,
 }
 `
 

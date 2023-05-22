@@ -20,22 +20,22 @@ func checkYaml() error {
 		middleware
 		|---yaml
 			|---codec.go
-			|---yaml2.go
+			|---yaml3.go
 	*/
 	codec := model.PathInfo{
 		Name:     "codec.go",
 		IsFolder: false,
 		Child:    nil,
 	}
-	yaml2 := model.PathInfo{
-		Name:     "yaml2.go",
+	yaml3 := model.PathInfo{
+		Name:     "yaml3.go",
 		IsFolder: false,
 		Child:    nil,
 	}
 	yaml := model.PathInfo{
 		Name:     "yaml",
 		IsFolder: true,
-		Child:    []model.PathInfo{codec, yaml2},
+		Child:    []model.PathInfo{codec, yaml3},
 	}
 	middleware := model.PathInfo{
 		Name:     "middleware",
@@ -120,8 +120,8 @@ func getYamlFileContent(path string) string {
 	switch path {
 	case "middleware/yaml/codec.go":
 		return YamlCodec
-	case "middleware/yaml/yaml2.go":
-		return fmt.Sprintf(YamlYaml2, ModuleYaml)
+	case "middleware/yaml/yaml3.go":
+		return fmt.Sprintf(YamlYaml3, ModuleYaml)
 	}
 	return ""
 }

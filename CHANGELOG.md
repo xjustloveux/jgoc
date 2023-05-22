@@ -1,3 +1,10 @@
+# v1.0.24 (2023.05.22)
+Changes：
+* Update golang version to 1.20
+* Update JGo version to 1.21
+* Update middleware version
+* Update yaml to v3
+
 # v1.0.23 (2023.02.22)
 Bug Fixes：
 * Fixed postgresql model default value bug
