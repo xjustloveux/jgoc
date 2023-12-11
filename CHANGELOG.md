@@ -1,3 +1,7 @@
+# v1.0.25 (2023.12.11)
+Changes：
+* Update golang and packages version
+
 # v1.0.24 (2023.05.22)
 Changes：
 * Update golang version to 1.20
