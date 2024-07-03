@@ -1,3 +1,7 @@
+# v1.0.26 (2024.07.03)
+Changes：
+* Update golang and packages version
+
 # v1.0.26 (2023.12.11)
 Changes：
 * Update JGo version
