@@ -1,4 +1,4 @@
-# v1.0.26 (2024.07.03)
+# v1.0.27 (2024.07.03)
 Changes：
 * Update golang and packages version
 
